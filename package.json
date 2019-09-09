@@ -1,0 +1,16 @@
+{
+  "name": "remote_cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/cxwithyxy/remote_cli.git",
+  "author": "cx2889 <cxwithyxy@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "5.0.4",
+    "typescript": "^3.6.2"
+  },
+  "dependencies": {
+    "badbadconnection": "git+https://github.com/cxwithyxy/badbadconnection.git",
+    "electron_commandline_UI": "git+https://github.com/cxwithyxy/electron_commandline_UI.git"
+  }
+}
