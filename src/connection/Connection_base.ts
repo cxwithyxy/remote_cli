@@ -25,5 +25,16 @@ export class Connection_base
             }
         )
         await this.conn.init()
+        this.conn.on_recv(this.on_resv)
+    }
+
+    send(msg: string)
+    {
+        this.conn.send(msg)
+    }
+
+    on_resv(msg: string)
+    {
+
     }
 }
