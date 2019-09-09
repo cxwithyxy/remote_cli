@@ -1,6 +1,8 @@
 import {Path_helper} from "Electron_path_helper"
 import Conf from "Conf";
 
+class NOT_FOUND extends Error {}
+
 export class Config_helper
 {
     conf_storage_path: string
@@ -16,12 +18,17 @@ export class Config_helper
         });
     }
 
-    get(_key: string): string | false
+    get(_key: string): string
     {
-        return this.conf_driver.get(_key, false)
+        let result = this.conf_driver.get(_key, false)
+        if(result === false)
+        {
+            throw new NOT_FOUND(`${_key} Not found`)
+        }
+        return result
     }
 
-    set(_key:string, _value: string | number | boolean)
+    set(_key:string, _value: string | number )
     {
         this.conf_driver.set(_key, _value)
     }
