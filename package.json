@@ -1,13 +1,13 @@
 {
   "name": "remote_cli",
   "version": "1.0.0",
-  "main": "src/Main.js",
+  "main": "dist/Main.js",
   "repository": "https://github.com/cxwithyxy/remote_cli.git",
   "author": "cx2889 <cxwithyxy@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/aes-js": "^3.1.0",
-    "electron": "5.0.4",
+    "electron": "6.0.2",
     "typescript": "^3.6.2"
   },
   "dependencies": {

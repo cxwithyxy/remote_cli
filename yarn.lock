@@ -69,8 +69,8 @@ aws4@^1.8.0:
   integrity sha1-8OAD2cqef1nHpQiUXXsu+aBKVC8=
 
 "badbadconnection@git+https://github.com/cxwithyxy/badbadconnection.git":
-  version "1.201908191144.0"
-  resolved "git+https://github.com/cxwithyxy/badbadconnection.git#b878461e2e668056f6966836836d30b6af2c21fc"
+  version "1.20190916170803.0"
+  resolved "git+https://github.com/cxwithyxy/badbadconnection.git#1a06c31e2f79abd07a7f339abc00a9f509a6b3dd"
   dependencies:
     aes-js "^3.1.2"
     md5.js "^1.3.5"
@@ -219,10 +219,10 @@ electron-download@^4.1.0:
     semver "^5.4.1"
     sumchecker "^2.0.2"
 
-electron@5.0.4:
-  version "5.0.4"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-5.0.4.tgz#2e0d09055363e983f4a73317cde4821c39617b02"
-  integrity sha1-Lg0JBVNj6YP0pzMXzeSCHDlhewI=
+electron@6.0.2:
+  version "6.0.2"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-6.0.2.tgz#437f3ac2bcb42116d92a3f1084280e0b2cff1493"
+  integrity sha1-Q386wry0IRbZKj8QhCgOCyz/FJM=
   dependencies:
     "@types/node" "^10.12.18"
     electron-download "^4.1.0"
