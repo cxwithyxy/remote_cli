@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@types/aes-js@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/@types/aes-js/download/@types/aes-js-3.1.0.tgz#28175b1be1a4df371098b25f94aac35a4c02bfa7"
+  integrity sha1-KBdbG+Gk3zcQmLJflKrDWkwCv6c=
+
 "@types/node@^10.12.18":
   version "10.14.17"
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-10.14.17.tgz?cache=0&sync_timestamp=1567537168246&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-10.14.17.tgz#b96d4dd3e427382482848948041d3754d40fd5ce"
