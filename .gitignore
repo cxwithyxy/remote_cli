@@ -63,3 +63,4 @@ typings/
 dist
 
 build_dist
+app.conf.json

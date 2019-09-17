@@ -13,6 +13,12 @@ export class Connection_base
         this.conf = new Config_helper()
     }
 
+    set_password(pswd: string, counter: number)
+    {
+        this.conf.set(`${this.connection_name}_password`, pswd)
+        this.conf.set(`${this.connection_name}_counter`, counter)
+    }
+
     async start()
     {
         let pswd = this.conf.get(`${this.connection_name}_password`)
@@ -35,6 +41,6 @@ export class Connection_base
 
     on_resv(msg: string)
     {
-
+        console.log(`resv ${msg}`);
     }
 }
