@@ -43,7 +43,7 @@ export class Command_helper
         let func = _.get(this.function_dict, command_b.name)
         if(isUndefined(func))
         {
-            throw new COMMAND_NO_FOUND(`there is not function name "${command_b.name}"`)
+            throw new COMMAND_NO_FOUND(`there is not command name "${command_b.name}"`)
         }
         return func(...command_b.argus)
     }

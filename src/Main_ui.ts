@@ -28,7 +28,8 @@ export class Main_ui extends UI
             }
             catch(e)
             {
-                return_str = String(e)
+                
+                return_str = `${e.constructor.name}-${String(e)}`
             }
             this.send(return_str)
         })
