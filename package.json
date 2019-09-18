@@ -16,7 +16,8 @@
     "badbadconnection": "git+https://github.com/cxwithyxy/badbadconnection.git",
     "conf": "^5.0.0",
     "electron_commandline_UI": "git+https://github.com/cxwithyxy/electron_commandline_UI.git",
-    "iconv-lite": "^0.5.0"
+    "iconv-lite": "^0.5.0",
+    "lodash": "^4.17.15"
   },
   "scripts": {
     "start": "tsc && electron ."
