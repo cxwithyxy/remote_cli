@@ -11,7 +11,7 @@ interface command_base
 
 interface func_dict
 {
-    [propName: string]: (...argus: any[]) => string
+    [propName: string]: (...argus: any[]) => Promise<string>
 }
 
 export class Command_helper
@@ -23,7 +23,7 @@ export class Command_helper
         this.function_dict = {}
     }
 
-    add_func(key: string, _func: (...argus: any[]) => string)
+    add_func(key: string, _func: (...argus: any[]) => Promise<string>)
     {
         _.set(this.function_dict, key, _func)
     }
@@ -37,7 +37,7 @@ export class Command_helper
         }
     }
 
-    run(command: string): string
+    async run(command: string): Promise<string>
     {
         let command_b = this.get_command_base(command)
         let func = _.get(this.function_dict, command_b.name)
@@ -45,6 +45,6 @@ export class Command_helper
         {
             throw new COMMAND_NO_FOUND(`there is not command name "${command_b.name}"`)
         }
-        return func(...command_b.argus)
+        return await func(...command_b.argus)
     }
 }
