@@ -69,8 +69,8 @@ aws4@^1.8.0:
   integrity sha1-8OAD2cqef1nHpQiUXXsu+aBKVC8=
 
 "badbadconnection@git+https://github.com/cxwithyxy/badbadconnection.git":
-  version "1.20190917144230.0"
-  resolved "git+https://github.com/cxwithyxy/badbadconnection.git#078b63d11018d475447bd9370c805179d23afefa"
+  version "2.20190918142006.0"
+  resolved "git+https://github.com/cxwithyxy/badbadconnection.git#3cd2778ea198c7c1193f759808d8946a49eecf0d"
   dependencies:
     aes-js "^3.1.2"
     md5.js "^1.3.5"
