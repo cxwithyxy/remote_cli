@@ -10,8 +10,9 @@ app.on("ready", async() =>
     c1.set_password("cx",2)
     await s1.start()
     await c1.start()
-    setInterval(() =>
-    {
-        c1.send(String(Date.now() + Math.random()* 1e10))
-    },1e3)
+    c1.send("dir")
+    // setInterval(() =>
+    // {
+    //     c1.send(String(Date.now() + Math.random()* 1e10))
+    // },1e3)
 })
