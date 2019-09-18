@@ -8,7 +8,7 @@ app.on("ready", async() =>
 {
     let m_ui = new Main_ui()
     await m_ui.init_win()
-    m_ui.set_title("远程命令行")
+    
     // let c1 = new Client("mysaa")
     // let s1 = new Server("mysaa")
     // c1.set_password("cx",2)
