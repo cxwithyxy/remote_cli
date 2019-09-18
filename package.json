@@ -1,16 +1,23 @@
 {
   "name": "remote_cli",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/Main.js",
   "repository": "https://github.com/cxwithyxy/remote_cli.git",
   "author": "cx2889 <cxwithyxy@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "5.0.4",
+    "@types/aes-js": "^3.1.0",
+    "electron": "6.0.9",
     "typescript": "^3.6.2"
   },
   "dependencies": {
+    "Electron_path_helper": "git+https://github.com/cxwithyxy/Electron_path_helper.git",
     "badbadconnection": "git+https://github.com/cxwithyxy/badbadconnection.git",
-    "electron_commandline_UI": "git+https://github.com/cxwithyxy/electron_commandline_UI.git"
+    "conf": "^5.0.0",
+    "electron_commandline_UI": "git+https://github.com/cxwithyxy/electron_commandline_UI.git",
+    "iconv-lite": "^0.5.0"
+  },
+  "scripts": {
+    "start": "tsc && electron ."
   }
 }
