@@ -46,6 +46,17 @@ export class Main_ui extends UI
 
     init_command()
     {
+        if(!isUndefined(this.UI_win))
+        {
+            this.UI_win.on("close", () =>
+            {
+                this.current_client.close()
+                for(var i in this.server_list)
+                {
+                    this.server_list[i].close()
+                }
+            })
+        }
         this.command_helper.add_func("close", async () =>
         {
             setTimeout(() =>
