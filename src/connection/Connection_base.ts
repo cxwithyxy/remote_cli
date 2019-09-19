@@ -52,4 +52,9 @@ export class Connection_base
     {
         console.log(`resv ${msg}`);
     }
+
+    close()
+    {
+        this.conn.win.close()
+    }
 }
