@@ -55,6 +55,6 @@ export class Connection_base
 
     close()
     {
-        this.conn.win.close()
+        this.conn.close()
     }
 }
