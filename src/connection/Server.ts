@@ -21,6 +21,15 @@ export class Server extends Connection_base
 
     run_cmd(cmd: string)
     {
-        return execSync(cmd)
+        let cmd_return
+        try
+        {
+            cmd_return = execSync(cmd)
+        }
+        catch(e)
+        {
+            cmd_return = e.stderr
+        }
+        return cmd_return
     }
 }
