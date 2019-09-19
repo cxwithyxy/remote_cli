@@ -102,7 +102,7 @@ export class Main_ui extends UI
     {
         this.command_helper.add_func("remote", async (...argus: string[]) =>
         {
-            let cmd_return: string
+            let cmd_return: string = ""
             if(isUndefined(this.current_client))
             {
                 try
@@ -114,13 +114,18 @@ export class Main_ui extends UI
                 catch(e)
                 {
                     cmd_return = `远程连接客户端启动失败，请确定频道和加密方式是否设置好\n${String(e)}`
+                    return cmd_return
                 }
             }
-            else
+            await new Promise(async (succ) =>
             {
+                this.current_client.on_resv = (msg) =>
+                {
+                    cmd_return = msg
+                    succ()
+                }
                 this.current_client.send(argus.join(" "))
-                cmd_return = ""
-            }
+            })
             return cmd_return
         })
     }
