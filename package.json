@@ -1,6 +1,6 @@
 {
   "name": "remote_cli",
-  "version": "1.0.0",
+  "version": "0.20190919112222.0",
   "main": "dist/Main.js",
   "repository": "https://github.com/cxwithyxy/remote_cli.git",
   "author": "cx2889 <cxwithyxy@gmail.com>",
@@ -9,6 +9,7 @@
     "@types/aes-js": "^3.1.0",
     "@types/lodash": "^4.14.138",
     "electron": "6.0.9",
+    "electron-builder": "^21.2.0",
     "typescript": "^3.6.2"
   },
   "dependencies": {
@@ -20,6 +21,35 @@
     "lodash": "^4.17.15"
   },
   "scripts": {
-    "start": "tsc && electron ."
+    "start": "tsc && electron .",
+    "exe": "tsc && electron-builder --win zip",
+    "build": "tsc && electron-builder --dir"
+  },
+  "build": {
+    "directories": {
+      "output": "build_dist"
+    },
+    "files": [
+      "**/*",
+      "!app.conf.json",
+      "!ui_log.txt",
+      "!**/*.ts",
+      "!src",
+      "!yarn-error.log",
+      "!*.md",
+      "!tsconfig.json",
+      "!.vscode/",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ]
   }
 }

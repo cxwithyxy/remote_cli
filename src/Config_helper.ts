@@ -1,5 +1,5 @@
 import {Path_helper} from "Electron_path_helper"
-import Conf from "Conf";
+import Conf from "conf";
 
 class NOT_FOUND extends Error {}
 
