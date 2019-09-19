@@ -1,5 +1,6 @@
 import { Badbadconnection } from "badbadconnection";
 import { Config_helper } from "../Config_helper";
+import { isUndefined } from "util";
 
 export class Connection_base
 {
@@ -9,14 +10,19 @@ export class Connection_base
 
     constructor(_name: string)
     {
+        if(isUndefined(_name))
+        {
+            throw new Error(`name must be defined`)
+        }
         this.connection_name = _name
         this.conf = new Config_helper()
     }
 
-    set_password(pswd: string, counter: number)
+    static set_password(connection_name: string, pswd: string, counter: number)
     {
-        this.conf.set(`${this.connection_name}_password`, pswd)
-        this.conf.set(`${this.connection_name}_counter`, counter)
+        let conf = new Config_helper()
+        conf.set(`${connection_name}_password`, pswd)
+        conf.set(`${connection_name}_counter`, counter)
     }
 
     async start()
