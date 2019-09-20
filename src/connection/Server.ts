@@ -1,5 +1,5 @@
 import { Connection_base } from "./Connection_base";
-import { execSync } from "child_process";
+import { spawn } from "child_process";
 import { decode } from "iconv-lite";
 
 export class Server extends Connection_base
@@ -7,8 +7,11 @@ export class Server extends Connection_base
     on_resv(msg: string)
     {
         console.log(`server_recv: ${msg}`);
-        
-        let cmd_return = this.run_cmd(msg)
+        this.run_cmd(msg)
+    }
+
+    cmd_output(cmd_return: Buffer | string)
+    {
         if(cmd_return instanceof Buffer)
         {
             this.send(decode(cmd_return, "GB2312"))
@@ -21,15 +24,13 @@ export class Server extends Connection_base
 
     run_cmd(cmd: string)
     {
-        let cmd_return
-        try
+        let terminal = spawn(cmd, {shell: true})
+        terminal.stdout.on("data", (data: Buffer) =>
         {
-            cmd_return = execSync(cmd)
-        }
-        catch(e)
-        {
-            cmd_return = e.stderr
-        }
-        return cmd_return
+            if(data)
+            {
+                this.cmd_output(data)
+            }
+        })
     }
 }

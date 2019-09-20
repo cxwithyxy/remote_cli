@@ -118,9 +118,13 @@ export class Main_ui extends UI
             {
                 try
                 {
+                    cmd_return = "远程连接客户端启动成功"
                     this.current_client = new Client(this.get_current_channel())
                     await this.current_client.start()
-                    cmd_return = "远程连接客户端启动成功"
+                    this.current_client.on_resv = (msg) =>
+                    {
+                        this.send(msg)
+                    }
                 }
                 catch(e)
                 {
@@ -128,15 +132,7 @@ export class Main_ui extends UI
                     return cmd_return
                 }
             }
-            await new Promise(async (succ) =>
-            {
-                this.current_client.on_resv = (msg) =>
-                {
-                    cmd_return = msg
-                    succ()
-                }
-                this.current_client.send(argus.join(" "))
-            })
+            this.current_client.send(argus.join(" "))
             return cmd_return
         })
     }
