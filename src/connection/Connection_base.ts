@@ -37,9 +37,9 @@ export class Connection_base
             }
         )
         await this.conn.init()
-        this.conn.on_recv((msg: string) =>
+        this.conn.on_recv(async (msg: string) =>
         {
-            this.on_resv(msg)
+            await this.on_resv(msg)
         })
     }
 
@@ -48,8 +48,17 @@ export class Connection_base
         this.conn.send(msg)
     }
 
-    on_resv(msg: string)
+    async on_resv(msg: string)
     {
         console.log(`resv ${msg}`);
+    }
+
+    close()
+    {
+        try
+        {
+            this.conn.close()
+        }
+        catch(e){console.log(e)}
     }
 }

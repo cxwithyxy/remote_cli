@@ -1,6 +1,6 @@
 {
   "name": "remote_cli",
-  "version": "0.20190919112222.0",
+  "version": "0.20190920173703.0",
   "main": "dist/Main.js",
   "repository": "https://github.com/cxwithyxy/remote_cli.git",
   "author": "cx2889 <cxwithyxy@gmail.com>",

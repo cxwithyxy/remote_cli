@@ -11,7 +11,7 @@ interface command_base
 
 interface func_dict
 {
-    [propName: string]: (...argus: any[]) => Promise<string>
+    [propName: string]: (...argus: string[]) => Promise<string>
 }
 
 export class Command_helper
@@ -23,7 +23,7 @@ export class Command_helper
         this.function_dict = {}
     }
 
-    add_func(key: string, _func: (...argus: any[]) => Promise<string>)
+    add_func(key: string, _func: (...argus: string[]) => Promise<string>)
     {
         _.set(this.function_dict, key, _func)
     }
