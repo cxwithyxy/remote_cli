@@ -1,5 +1,5 @@
 import { Connection_base } from "./Connection_base";
-import { spawn, ChildProcess } from "child_process";
+import { exec, execSync, ChildProcess } from "child_process";
 import { decode } from "iconv-lite";
 import _ from "lodash";
 import { Command_helper } from "../Command_helper";
@@ -45,7 +45,7 @@ export class Server extends Connection_base
             return
         }
         catch(e){}
-        let terminal = spawn(cmd, {shell: true})
+        let terminal = exec(cmd, {encoding:"buffer"})
         this.cmd_process_list.push(terminal)
         terminal.stdout.on("data", (data: Buffer) =>
         {
@@ -71,15 +71,13 @@ export class Server extends Connection_base
             let command_return:string
             try
             {
-                let delete_list = _.pullAt(this.cmd_process_list, Number(index))
-                console.log(delete_list);
-                
-                if(isUndefined(delete_list[0]))
+                let cmd_process_for_kill = this.cmd_process_list[Number(index)]
+                if(isUndefined(cmd_process_for_kill))
                 {
-                    throw new Error(`index "${index}" is not right`)
+                    throw new Error(`index "${index}" is not correct`)
                 }
-                delete_list[0].kill()
-                command_return = `stop successfully. now running cmd leaving ${this.cmd_process_list.length}`
+                this.kill_cmd_process(cmd_process_for_kill)
+                command_return = `stop successfully`
             }
             catch(e)
             {
@@ -89,11 +87,15 @@ export class Server extends Connection_base
         })
     }
 
+    kill_cmd_process(cmd_process: ChildProcess)
+    {
+        execSync('taskkill /pid ' + cmd_process.pid + ' /T /F')
+    }
+
     close()
     {
         this.cmd_process_list.forEach(element => {
-            element.stdin.end()
-            element.kill()
+            this.kill_cmd_process(element)
         });
         super.close()
     }
