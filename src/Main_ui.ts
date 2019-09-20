@@ -121,7 +121,7 @@ export class Main_ui extends UI
                     cmd_return = "远程连接客户端启动成功"
                     this.current_client = new Client(this.get_current_channel())
                     await this.current_client.start()
-                    this.current_client.on_resv = (msg) =>
+                    this.current_client.on_resv = async (msg) =>
                     {
                         this.send(msg)
                     }
