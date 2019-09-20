@@ -6,6 +6,8 @@ import { isUndefined } from "util";
 import { Client } from "./connection/Client";
 import { Server } from "./connection/Server";
 
+class Aready_running_server extends Error{}
+
 export class Main_ui extends UI
 {
     command_helper: Command_helper
@@ -50,11 +52,13 @@ export class Main_ui extends UI
         {
             this.UI_win.on("close", () =>
             {
-                this.current_client.close()
-                for(var i in this.server_list)
+                try
                 {
-                    this.server_list[i].close()
-                }
+                    this.current_client.close()
+                }catch(e){}
+                this.server_list.forEach(element => {
+                    element.close()
+                });
             })
         }
         this.command_helper.add_func("close", async () =>
@@ -139,6 +143,10 @@ export class Main_ui extends UI
 
     async add_server(channel: string)
     {
+        if(_.findIndex(this.server_list, {connection_name: channel}) != -1)
+        {
+            throw new Aready_running_server(`server in channel "${channel}" is already running`)
+        }
         let temp_server = new Server(channel)
         await temp_server.start()
         this.server_list.push(temp_server)
