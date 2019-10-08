@@ -2,13 +2,7 @@
 
 通过公用免费的websocket服务器现实的远程命令行终端(伪)
 
-最新版本：v0.20190920173703
-
-
-
-## 已知问题
-
-1. 超过 5k 的数据无法被发送和接收
+最新版本：v1.20191008151857
 
 
 
@@ -38,11 +32,11 @@
    remote your_command
    ```
 
-   your_command 命令, 如 dir
+   your_command 服务端要执行的命令, 如 dir
 
 
 
-## 其他命令
+## 其他命令(客户端)
 
 ### get_channel
 
@@ -51,6 +45,24 @@
 ### close
 
 关闭终端
+
+
+
+## 服务端命令(服务端)
+
+### server_cmd_count
+
+显示当前的cmd进程
+
+### server_cmd_stop
+
+结束第几个cmd进程
+
+```
+server_cmd_stop index
+```
+
+index 第几个进程。如：第一个，则为0
 
 
 
