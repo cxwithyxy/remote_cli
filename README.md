@@ -32,7 +32,7 @@
    remote your_command
    ```
 
-   your_command 服务端要执行的命令, 如 dir
+   your_command 服务端要执行的命令(或"其他命令-服务端"), 如 dir
 
 
 
@@ -48,7 +48,7 @@
 
 
 
-## 服务端命令(服务端)
+## 其他命令(服务端)
 
 ### server_cmd_count
 
