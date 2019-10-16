@@ -168,14 +168,24 @@ export class Main_ui extends UI
 
     init_startup()
     {
-        this.command_helper.add_func("set_startup", async (cmd: string) =>
+        this.command_helper.add_func("set_startup", async (...argus: string[]) =>
         {
-            this.conf.set("startup", cmd)
+            this.conf.set("startup", argus.join(" "))
             return "startup setting success"
         })
         this.command_helper.add_func("show_startup", async (cmd: string) =>
         {
             return this.conf.get("startup")
         })
+        let startup_cmd
+        try
+        {
+            startup_cmd = this.conf.get("startup")
+        }catch(e){}
+        if(startup_cmd)
+        {
+            this.send(`### Running startup command: ${startup_cmd}`)
+            this.cmd_handle(startup_cmd)
+        }
     }
 }
