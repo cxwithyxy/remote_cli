@@ -30,20 +30,22 @@ export class Main_ui extends UI
     {
         await super.init_win(_option)
         this.set_title("远程命令行")
-        this.on_msg(async (command: string) =>
-        {
-            let return_str: string
-            try
-            {
-                return_str = await this.command_helper.run(command)
-            }
-            catch(e)
-            {
-                return_str = `${e.constructor.name}-${String(e)}`
-            }
-            this.send(return_str)
-        })
+        this.on_msg(this.cmd_handle.bind(this))
         this.init_command()
+    }
+
+    async cmd_handle(command: string)
+    {
+        let return_str: string
+        try
+        {
+            return_str = await this.command_helper.run(command)
+        }
+        catch(e)
+        {
+            return_str = `${e.constructor.name}-${String(e)}`
+        }
+        this.send(return_str)
     }
 
     init_command()
