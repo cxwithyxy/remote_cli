@@ -75,6 +75,7 @@ export class Main_ui extends UI
         this.init_command_channel()
         this.init_client()
         this.init_server()
+        this.init_startup()
     }
 
     init_command_channel()
@@ -160,6 +161,19 @@ export class Main_ui extends UI
             await this.add_server(name)
             cmd_return = `server in "${name} channel start"`
             return cmd_return
+        })
+    }
+
+    init_startup()
+    {
+        this.command_helper.add_func("set_startup", async (cmd: string) =>
+        {
+            this.conf.set("startup", cmd)
+            return "startup setting success"
+        })
+        this.command_helper.add_func("show_startup", async (cmd: string) =>
+        {
+            return this.conf.get("startup")
         })
     }
 }
