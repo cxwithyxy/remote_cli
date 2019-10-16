@@ -30,20 +30,22 @@ export class Main_ui extends UI
     {
         await super.init_win(_option)
         this.set_title("远程命令行")
-        this.on_msg(async (command: string) =>
-        {
-            let return_str: string
-            try
-            {
-                return_str = await this.command_helper.run(command)
-            }
-            catch(e)
-            {
-                return_str = `${e.constructor.name}-${String(e)}`
-            }
-            this.send(return_str)
-        })
+        this.on_msg(this.cmd_handle.bind(this))
         this.init_command()
+    }
+
+    async cmd_handle(command: string)
+    {
+        let return_str: string
+        try
+        {
+            return_str = await this.command_helper.run(command)
+        }
+        catch(e)
+        {
+            return_str = `${e.constructor.name}-${String(e)}`
+        }
+        this.send(return_str)
     }
 
     init_command()
@@ -75,6 +77,7 @@ export class Main_ui extends UI
         this.init_command_channel()
         this.init_client()
         this.init_server()
+        this.init_startup()
     }
 
     init_command_channel()
@@ -161,5 +164,28 @@ export class Main_ui extends UI
             cmd_return = `server in "${name} channel start"`
             return cmd_return
         })
+    }
+
+    init_startup()
+    {
+        this.command_helper.add_func("set_startup", async (...argus: string[]) =>
+        {
+            this.conf.set("startup", argus.join(" "))
+            return "startup setting success"
+        })
+        this.command_helper.add_func("show_startup", async (cmd: string) =>
+        {
+            return this.conf.get("startup")
+        })
+        let startup_cmd
+        try
+        {
+            startup_cmd = this.conf.get("startup")
+        }catch(e){}
+        if(startup_cmd)
+        {
+            this.send(`### Running startup command: ${startup_cmd}`)
+            this.cmd_handle(startup_cmd)
+        }
     }
 }
