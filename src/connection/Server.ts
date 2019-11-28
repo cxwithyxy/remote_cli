@@ -60,14 +60,23 @@ export class Server extends Connection_base
             }
         },1e3)
         
-        
+    }
+
+    async get_terminal_id_list (): Promise<Array<number>>
+    {
+        let all_term_id = await this.http_conn.post(`/all`)
+        return <Array<number>>all_term_id.data
     }
 
     init_server_own_command()
     {
         this.command_helper.add_func("server_cmd_count", async () =>
         {
-            return String(this.cmd_process_list.length)
+            return String((await this.get_terminal_id_list()).length)
+        })
+        this.command_helper.add_func("server_cmd_list", async () =>
+        {
+            return (await this.get_terminal_id_list()).join(", ")
         })
         this.command_helper.add_func("server_cmd_stop", async (index: string) =>
         {
