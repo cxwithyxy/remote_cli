@@ -68,6 +68,12 @@ export class Server extends Connection_base
         return <Array<number>>all_term_id.data
     }
 
+    async kill_terminal(id: number): Promise<boolean>
+    {
+        let result = Number((await this.http_conn.post(`/close`, {id: id})).data)
+        return !!result
+    }
+
     init_server_own_command()
     {
         this.command_helper.add_func("server_cmd_count", async () =>
@@ -81,19 +87,10 @@ export class Server extends Connection_base
         this.command_helper.add_func("server_cmd_stop", async (index: string) =>
         {
             let command_return:string
-            try
+            command_return = `stop successfully`
+            if(!await this.kill_terminal(Number(index)))
             {
-                let cmd_process_for_kill = this.cmd_process_list[Number(index)]
-                if(isUndefined(cmd_process_for_kill))
-                {
-                    throw new Error(`index "${index}" is not correct`)
-                }
-                this.kill_cmd_process(cmd_process_for_kill)
-                command_return = `stop successfully`
-            }
-            catch(e)
-            {
-                command_return = String(e)
+                command_return = `terminal(${index}) NOT FOUND`
             }
             return command_return
         })
