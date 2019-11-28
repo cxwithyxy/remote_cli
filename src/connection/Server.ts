@@ -4,11 +4,13 @@ import { decode } from "iconv-lite";
 import _ from "lodash";
 import { Command_helper } from "../Command_helper";
 import { isUndefined } from "util";
+import axios, { AxiosInstance } from "axios";
 
 export class Server extends Connection_base
 {
     command_helper: Command_helper
     cmd_process_list: ChildProcess[]
+    http_conn: AxiosInstance
 
     constructor(name: string)
     {
@@ -16,6 +18,8 @@ export class Server extends Connection_base
         this.cmd_process_list = []
         this.command_helper = new Command_helper()
         this.init_server_own_command()
+        this.http_conn = axios.create({baseURL: 'http://127.0.0.1:8000/',})
+        this.http_conn.post("/create")
     }
 
     async on_resv(msg: string)
@@ -45,19 +49,18 @@ export class Server extends Connection_base
             return
         }
         catch(e){}
-        let terminal = exec(cmd, {encoding:"buffer"})
-        this.cmd_process_list.push(terminal)
-        terminal.stdout.on("data", (data: Buffer) =>
+        this.http_conn.post(`/run`, {id:1, cmd: cmd})
+        setInterval(async () =>
         {
-            if(data)
+            let result = await this.http_conn.post(`/result`, {id: 1})
+            if(result.data.length > 0)
             {
-                this.cmd_output(data)
+                this.cmd_output(result.data.replace(
+                    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-Zbcf-nqry=><]/g, ''))
             }
-        })
-        terminal.stdout.on("end", () =>
-        {
-            _.pull(this.cmd_process_list, terminal)
-        })
+        },1e3)
+        
+        
     }
 
     init_server_own_command()

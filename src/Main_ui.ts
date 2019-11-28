@@ -161,7 +161,7 @@ export class Main_ui extends UI
         {
             let cmd_return: string
             await this.add_server(name)
-            cmd_return = `server in "${name} channel start"`
+            cmd_return = `server in "${name} channel" start`
             return cmd_return
         })
     }
