@@ -1,9 +1,8 @@
 import { Connection_base } from "./Connection_base";
-import { exec, execSync, ChildProcess } from "child_process";
+import { exec, execSync, ChildProcess, spawn } from "child_process";
 import { decode } from "iconv-lite";
 import _ from "lodash";
 import { Command_helper } from "../Command_helper";
-import { isUndefined } from "util";
 import axios, { AxiosInstance } from "axios";
 
 export class Server extends Connection_base
@@ -12,6 +11,7 @@ export class Server extends Connection_base
     cmd_process_list: ChildProcess[]
     http_conn!: AxiosInstance
     current_terminal_id!: number
+    terminal_http_api_port = 8000
 
     constructor(name: string)
     {
@@ -21,9 +21,15 @@ export class Server extends Connection_base
         this.init_server_own_command()
     }
 
+    async init_terminal_http_api_exe()
+    {
+        spawn(`${__dirname}/../../terminal_http_api/terminal_http_api.exe`,[String(this.terminal_http_api_port)])
+    }
+
     async init()
     {
-        this.http_conn = axios.create({baseURL: 'http://127.0.0.1:8000/',})
+        await this.init_terminal_http_api_exe()
+        this.http_conn = axios.create({baseURL: `http://127.0.0.1:${this.terminal_http_api_port}/`,})
         if((await this.get_terminal_id_list()).length == 0)
         {
             this.current_terminal_id = await this.create_terminal()
