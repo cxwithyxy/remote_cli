@@ -64,3 +64,4 @@ dist
 
 build_dist
 app.conf.json
+terminal_http_api/
