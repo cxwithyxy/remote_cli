@@ -26,12 +26,17 @@ export class Server extends Connection_base
         this.http_conn = axios.create({baseURL: 'http://127.0.0.1:8000/',})
         if((await this.get_terminal_id_list()).length == 0)
         {
-            this.current_terminal_id = Number((await this.http_conn.post("/create")).data)
+            this.current_terminal_id = await this.create_terminal()
         }
         else
         {
             this.current_terminal_id = (await this.get_terminal_id_list())[0]
         }
+    }
+
+    async create_terminal(): Promise<number>
+    {
+        return Number((await this.http_conn.post("/create")).data)
     }
 
     async on_resv(msg: string)
@@ -88,6 +93,21 @@ export class Server extends Connection_base
 
     init_server_own_command()
     {
+        this.command_helper.add_func("server_cmd_switch", async (index: string) =>
+        {
+            this.current_terminal_id = Number(index)
+            return `已经切换到终端 ${index}`
+        })
+
+        this.command_helper.add_func("server_cmd_now", async () =>
+        {
+            return String(this.current_terminal_id)
+        })
+        
+        this.command_helper.add_func("server_cmd_start", async () =>
+        {
+            return String(await this.create_terminal())
+        })
         this.command_helper.add_func("server_cmd_count", async () =>
         {
             return String((await this.get_terminal_id_list()).length)
