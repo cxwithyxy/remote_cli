@@ -10,7 +10,8 @@ export class Server extends Connection_base
 {
     command_helper: Command_helper
     cmd_process_list: ChildProcess[]
-    http_conn: AxiosInstance
+    http_conn!: AxiosInstance
+    current_terminal_id!: number
 
     constructor(name: string)
     {
@@ -18,8 +19,19 @@ export class Server extends Connection_base
         this.cmd_process_list = []
         this.command_helper = new Command_helper()
         this.init_server_own_command()
+    }
+
+    async init()
+    {
         this.http_conn = axios.create({baseURL: 'http://127.0.0.1:8000/',})
-        this.http_conn.post("/create")
+        if((await this.get_terminal_id_list()).length == 0)
+        {
+            this.current_terminal_id = Number((await this.http_conn.post("/create")).data)
+        }
+        else
+        {
+            this.current_terminal_id = (await this.get_terminal_id_list())[0]
+        }
     }
 
     async on_resv(msg: string)
@@ -49,10 +61,10 @@ export class Server extends Connection_base
             return
         }
         catch(e){}
-        this.http_conn.post(`/run`, {id:1, cmd: cmd})
+        this.http_conn.post(`/run`, {id:this.current_terminal_id, cmd: cmd})
         setInterval(async () =>
         {
-            let result = await this.http_conn.post(`/result`, {id: 1})
+            let result = await this.http_conn.post(`/result`, {id: this.current_terminal_id})
             if(result.data.length > 0)
             {
                 this.cmd_output(result.data.replace(
