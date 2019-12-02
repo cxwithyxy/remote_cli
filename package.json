@@ -10,6 +10,7 @@
     "@types/lodash": "^4.14.138",
     "electron": "6.0.9",
     "electron-builder": "^21.2.0",
+    "path-exists": "^4.0.0",
     "typescript": "^3.6.2"
   },
   "dependencies": {
@@ -22,9 +23,11 @@
     "lodash": "^4.17.15"
   },
   "scripts": {
-    "start": "tsc && electron .",
-    "exe": "tsc && electron-builder --win zip",
-    "build": "tsc && electron-builder --dir"
+    "start": "yarn tsc && electron .",
+    "exe": "yarntsc && electron-builder --win zip",
+    "build": "yarn tsc && electron-builder --dir",
+    "cli:base":"yarn tsc -p cli_tool",
+    "cli:check_terminal_api":"yarn cli:base && node cli_tool/check_terminal_http_api_exe.js"
   },
   "build": {
     "directories": {
@@ -32,6 +35,7 @@
     },
     "files": [
       "**/*",
+      "!cli_tool/",
       "!app.conf.json",
       "!ui_log.txt",
       "!**/*.ts",
