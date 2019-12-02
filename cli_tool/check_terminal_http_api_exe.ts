@@ -6,8 +6,6 @@ import { unlinkSync } from "fs";
 {
     let has_exe = await pathExists(`${__dirname}/../terminal_http_api/terminal_http_api.exe`)
     let has_node_modules = await pathExists(`${__dirname}/../terminal_http_api/node_modules/`)
-    // console.log(has_exe);
-    // console.log(has_node_modules);
 
     if(!(has_exe && has_node_modules))
     {
@@ -23,12 +21,11 @@ import { unlinkSync } from "fs";
         console.log(latest_release[0].browser_download_url)
         let stop_display_dl = display_download_file_size(terminal_http_api_zip_path, 300, (now_size) =>
         {
-            // console.log(`${now_size}/${latest_release[0].size}`);
-            let p = (now_size/83614240 /* latest_release[0].size */ * 100).toFixed(2)
+            let p = (now_size/latest_release[0].size * 100).toFixed(2)
             console.log(`${p}%`);
             
         })
-        await download_it(/* latest_release[0].browser_download_url */"https://qd.myapp.com/myapp/qqteam/pcqq/PCQQ2019.exe", terminal_http_api_zip_path)
+        await download_it(latest_release[0].browser_download_url, terminal_http_api_zip_path)
         stop_display_dl()
     }
 })()
