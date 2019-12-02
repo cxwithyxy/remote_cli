@@ -38,6 +38,15 @@ export class Server extends Connection_base
         {
             this.current_terminal_id = (await this.get_terminal_id_list())[0]
         }
+        setInterval(async () =>
+        {
+            let result = await this.http_conn.post(`/result`, {id: this.current_terminal_id})
+            if(result.data.length > 0)
+            {
+                this.cmd_output(result.data.replace(
+                    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-Zbcf-nqry=><]/g, ''))
+            }
+        },1e3)
     }
 
     async create_terminal(): Promise<number>
@@ -73,16 +82,6 @@ export class Server extends Connection_base
         }
         catch(e){}
         this.http_conn.post(`/run`, {id:this.current_terminal_id, cmd: cmd})
-        setInterval(async () =>
-        {
-            let result = await this.http_conn.post(`/result`, {id: this.current_terminal_id})
-            if(result.data.length > 0)
-            {
-                this.cmd_output(result.data.replace(
-                    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-Zbcf-nqry=><]/g, ''))
-            }
-        },1e3)
-        
     }
 
     async get_terminal_id_list (): Promise<Array<number>>
