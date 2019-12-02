@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "yarn tsc && electron .",
-    "exe": "yarntsc && electron-builder --win zip",
+    "exe": "yarn tsc && electron-builder --win zip",
     "build": "yarn tsc && electron-builder --dir",
     "cli:base": "yarn tsc -p cli_tool",
     "cli:check_terminal_api": "yarn cli:base && node cli_tool/check_terminal_http_api_exe.js"
@@ -38,6 +38,8 @@
     },
     "files": [
       "**/*",
+      "!terminal_http_api/",
+      "!terminal_http_api.zip",
       "!cli_tool/",
       "!app.conf.json",
       "!ui_log.txt",
@@ -58,6 +60,9 @@
       "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "extraFiles": [
+      "terminal_http_api/"
     ]
   }
 }
