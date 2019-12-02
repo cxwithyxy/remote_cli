@@ -23,7 +23,7 @@ export class Server extends Connection_base
 
     async init_terminal_http_api_exe()
     {
-        spawn(`${__dirname}/../../terminal_http_api/terminal_http_api.exe`,[String(this.terminal_http_api_port)])
+        spawn(`./terminal_http_api/terminal_http_api.exe`,[String(this.terminal_http_api_port)])
     }
 
     async init()
