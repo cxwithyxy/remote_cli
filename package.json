@@ -11,7 +11,8 @@
     "electron": "6.0.9",
     "electron-builder": "^21.2.0",
     "path-exists": "^4.0.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.2",
+    "wgdown": "^2.1.10"
   },
   "dependencies": {
     "Electron_path_helper": "git+https://github.com/cxwithyxy/Electron_path_helper.git",
@@ -26,8 +27,8 @@
     "start": "yarn tsc && electron .",
     "exe": "yarntsc && electron-builder --win zip",
     "build": "yarn tsc && electron-builder --dir",
-    "cli:base":"yarn tsc -p cli_tool",
-    "cli:check_terminal_api":"yarn cli:base && node cli_tool/check_terminal_http_api_exe.js"
+    "cli:base": "yarn tsc -p cli_tool",
+    "cli:check_terminal_api": "yarn cli:base && node cli_tool/check_terminal_http_api_exe.js"
   },
   "build": {
     "directories": {
