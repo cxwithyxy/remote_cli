@@ -1,6 +1,7 @@
 import pathExists from "path-exists";
-import { net_get, download_it, display_download_file_size } from "./src/func_api";
+import { net_get, download_it, display_download_file_size, unzip } from "./src/func_api";
 import { unlinkSync } from "fs";
+
 
 (async () =>
 {
@@ -27,5 +28,8 @@ import { unlinkSync } from "fs";
         })
         await download_it(latest_release[0].browser_download_url, terminal_http_api_zip_path)
         stop_display_dl()
+        console.log("unzipping");
+        await unzip(terminal_http_api_zip_path, `${__dirname}/../`)
+        console.log("unzip finish");
     }
 })()

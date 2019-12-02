@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const wgdown_1 = require("wgdown");
 const fs_1 = require("fs");
+const extract_zip_1 = __importDefault(require("extract-zip"));
 async function net_get(url) {
     return (await axios_1.default.get(url)).data;
 }
@@ -50,3 +51,14 @@ async function download_it(url, download_path) {
     });
 }
 exports.download_it = download_it;
+async function unzip(source_path, unzip_to) {
+    await new Promise(succ => {
+        extract_zip_1.default(source_path, { dir: unzip_to }, (err) => {
+            if (err) {
+                console.log(err);
+            }
+            succ();
+        });
+    });
+}
+exports.unzip = unzip;

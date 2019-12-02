@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Log, Options, DownloadTarget, Wgdown } from "wgdown";
-import { statSync } from "fs";
+import { statSync } from "fs"
+import ex_unzip from "extract-zip";
 
 export async function net_get(url: string)
 {
@@ -58,5 +59,20 @@ export async function download_it(url: string, download_path:string)
         }
         let wgdown: Wgdown = new Wgdown(options);
         wgdown.download();
+    })
+}
+
+export async function unzip(source_path:string, unzip_to: string)
+{
+    await new Promise(succ => 
+    {
+        ex_unzip(source_path, <ex_unzip.Options>{dir:unzip_to},(err) =>
+        {
+            if(err)
+            {
+                console.log(err);
+            }
+            succ()
+        })
     })
 }
