@@ -1,19 +1,24 @@
 {
   "name": "remote_cli",
-  "version": "1.20191016150903.0",
+  "version": "2.20191203102442.0",
   "main": "dist/Main.js",
   "repository": "https://github.com/cxwithyxy/remote_cli.git",
   "author": "cx2889 <cxwithyxy@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/aes-js": "^3.1.0",
+    "@types/extract-zip": "^1.6.2",
     "@types/lodash": "^4.14.138",
     "electron": "6.0.9",
     "electron-builder": "^21.2.0",
-    "typescript": "^3.6.2"
+    "extract-zip": "^1.6.7",
+    "path-exists": "^4.0.0",
+    "typescript": "^3.6.2",
+    "wgdown": "^2.1.10"
   },
   "dependencies": {
     "Electron_path_helper": "git+https://github.com/cxwithyxy/Electron_path_helper.git",
+    "axios": "^0.19.0",
     "badbadconnection": "git+https://github.com/cxwithyxy/badbadconnection.git",
     "conf": "^5.0.0",
     "electron_commandline_UI": "git+https://github.com/cxwithyxy/electron_commandline_UI.git",
@@ -21,9 +26,11 @@
     "lodash": "^4.17.15"
   },
   "scripts": {
-    "start": "tsc && electron .",
-    "exe": "tsc && electron-builder --win zip",
-    "build": "tsc && electron-builder --dir"
+    "start": "yarn tsc && electron .",
+    "exe": "yarn tsc && electron-builder --win zip",
+    "build": "yarn tsc && electron-builder --dir",
+    "cli:base": "yarn tsc -p cli_tool",
+    "cli:check_terminal_api": "yarn cli:base && node cli_tool/check_terminal_http_api_exe.js"
   },
   "build": {
     "directories": {
@@ -31,6 +38,9 @@
     },
     "files": [
       "**/*",
+      "!terminal_http_api/",
+      "!terminal_http_api.zip",
+      "!cli_tool/",
       "!app.conf.json",
       "!ui_log.txt",
       "!**/*.ts",
@@ -50,6 +60,9 @@
       "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "extraFiles": [
+      "terminal_http_api/"
     ]
   }
 }

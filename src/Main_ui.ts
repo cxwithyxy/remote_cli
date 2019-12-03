@@ -151,6 +151,7 @@ export class Main_ui extends UI
             throw new Aready_running_server(`server in channel "${channel}" is already running`)
         }
         let temp_server = new Server(channel)
+        await temp_server.init()
         await temp_server.start()
         this.server_list.push(temp_server)
     }
@@ -161,7 +162,7 @@ export class Main_ui extends UI
         {
             let cmd_return: string
             await this.add_server(name)
-            cmd_return = `server in "${name} channel start"`
+            cmd_return = `server in "${name} channel" start`
             return cmd_return
         })
     }

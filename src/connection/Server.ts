@@ -1,14 +1,17 @@
 import { Connection_base } from "./Connection_base";
-import { exec, execSync, ChildProcess } from "child_process";
+import { exec, execSync, ChildProcess, spawn } from "child_process";
 import { decode } from "iconv-lite";
 import _ from "lodash";
 import { Command_helper } from "../Command_helper";
-import { isUndefined } from "util";
+import axios, { AxiosInstance } from "axios";
 
 export class Server extends Connection_base
 {
     command_helper: Command_helper
     cmd_process_list: ChildProcess[]
+    http_conn!: AxiosInstance
+    current_terminal_id!: number
+    terminal_http_api_port = 8000
 
     constructor(name: string)
     {
@@ -16,6 +19,39 @@ export class Server extends Connection_base
         this.cmd_process_list = []
         this.command_helper = new Command_helper()
         this.init_server_own_command()
+    }
+
+    async init_terminal_http_api_exe()
+    {
+        spawn(`./terminal_http_api/terminal_http_api.exe`,[String(this.terminal_http_api_port)])
+    }
+
+    async init()
+    {
+        await this.init_terminal_http_api_exe()
+        this.http_conn = axios.create({baseURL: `http://127.0.0.1:${this.terminal_http_api_port}/`,})
+        if((await this.get_terminal_id_list()).length == 0)
+        {
+            this.current_terminal_id = await this.create_terminal()
+        }
+        else
+        {
+            this.current_terminal_id = (await this.get_terminal_id_list())[0]
+        }
+        setInterval(async () =>
+        {
+            let result = await this.http_conn.post(`/result`, {id: this.current_terminal_id})
+            if(result.data.length > 0)
+            {
+                this.cmd_output(result.data.replace(
+                    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-Zbcf-nqry=><]/g, ''))
+            }
+        },1e3)
+    }
+
+    async create_terminal(): Promise<number>
+    {
+        return Number((await this.http_conn.post("/create")).data)
     }
 
     async on_resv(msg: string)
@@ -45,43 +81,53 @@ export class Server extends Connection_base
             return
         }
         catch(e){}
-        let terminal = exec(cmd, {encoding:"buffer"})
-        this.cmd_process_list.push(terminal)
-        terminal.stdout.on("data", (data: Buffer) =>
-        {
-            if(data)
-            {
-                this.cmd_output(data)
-            }
-        })
-        terminal.stdout.on("end", () =>
-        {
-            _.pull(this.cmd_process_list, terminal)
-        })
+        this.http_conn.post(`/run`, {id:this.current_terminal_id, cmd: cmd})
+    }
+
+    async get_terminal_id_list (): Promise<Array<number>>
+    {
+        let all_term_id = await this.http_conn.post(`/all`)
+        return <Array<number>>all_term_id.data
+    }
+
+    async kill_terminal(id: number): Promise<boolean>
+    {
+        let result = Number((await this.http_conn.post(`/close`, {id: id})).data)
+        return !!result
     }
 
     init_server_own_command()
     {
+        this.command_helper.add_func("server_cmd_switch", async (index: string) =>
+        {
+            this.current_terminal_id = Number(index)
+            return `已经切换到终端 ${index}`
+        })
+
+        this.command_helper.add_func("server_cmd_now", async () =>
+        {
+            return String(this.current_terminal_id)
+        })
+        
+        this.command_helper.add_func("server_cmd_start", async () =>
+        {
+            return String(await this.create_terminal())
+        })
         this.command_helper.add_func("server_cmd_count", async () =>
         {
-            return String(this.cmd_process_list.length)
+            return String((await this.get_terminal_id_list()).length)
+        })
+        this.command_helper.add_func("server_cmd_list", async () =>
+        {
+            return (await this.get_terminal_id_list()).join(", ")
         })
         this.command_helper.add_func("server_cmd_stop", async (index: string) =>
         {
             let command_return:string
-            try
+            command_return = `stop successfully`
+            if(!await this.kill_terminal(Number(index)))
             {
-                let cmd_process_for_kill = this.cmd_process_list[Number(index)]
-                if(isUndefined(cmd_process_for_kill))
-                {
-                    throw new Error(`index "${index}" is not correct`)
-                }
-                this.kill_cmd_process(cmd_process_for_kill)
-                command_return = `stop successfully`
-            }
-            catch(e)
-            {
-                command_return = String(e)
+                command_return = `terminal(${index}) NOT FOUND`
             }
             return command_return
         })
