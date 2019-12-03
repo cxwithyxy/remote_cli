@@ -29,8 +29,8 @@
     "start": "yarn tsc && electron .",
     "cli:base": "yarn tsc -p cli_tool",
     "cli:check_terminal_api": "yarn cli:base && node cli_tool/check_terminal_http_api_exe.js",
-    "exe": "yarn cli:check_terminal_api && electron-builder --win zip",
-    "build": "yarn cli:check_terminal_api && electron-builder --dir"
+    "exe": "yarn cli:check_terminal_api && yarn tsc && electron-builder --win zip",
+    "build": "yarn cli:check_terminal_api && yarn tsc && electron-builder --dir"
   },
   "build": {
     "directories": {
