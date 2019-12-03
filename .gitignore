@@ -67,3 +67,4 @@ app.conf.json
 terminal_http_api/
 cli_tool/*.js
 terminal_http_api.zip
+cli_as_socket_client.exe

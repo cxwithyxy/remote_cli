@@ -43,8 +43,7 @@ export class Server extends Connection_base
             let result = await this.http_conn.post(`/result`, {id: this.current_terminal_id})
             if(result.data.length > 0)
             {
-                this.cmd_output(result.data.replace(
-                    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-Zbcf-nqry=><]/g, ''))
+                this.cmd_output(result.data)
             }
         },1e3)
     }

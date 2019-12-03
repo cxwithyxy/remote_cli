@@ -1,36 +1,57 @@
-import { UI } from "electron_commandline_UI";
 import _ from "lodash";
 import { Command_helper } from "./Command_helper";
 import { Config_helper } from "./Config_helper";
 import { isUndefined } from "util";
 import { Client } from "./connection/Client";
 import { Server } from "./connection/Server";
+import { Server as NetServer, Socket } from "net";
+import { decode } from "iconv-lite";
 
 class Aready_running_server extends Error{}
 
-export class Main_ui extends UI
+export class Main_ui
 {
     command_helper: Command_helper
     conf: Config_helper
     current_client!: Client
     server_list: Server[]
+    net_socket_server: NetServer
+    current_socket!: Socket
 
-    constructor(win_setting?: object | undefined)
+    constructor()
     {
-        let preset = {
-            autoHideMenuBar: true
-        }
-        super(_.merge(preset, win_setting))
         this.command_helper = new Command_helper()
         this.conf = new Config_helper()
         this.server_list = []
+        this.net_socket_server = new NetServer()
     }
 
-    async init_win(_option?: { cmd_text: string, cmd_title: string})
+    on_msg(_fun: (command: string) =>{})
     {
-        await super.init_win(_option)
-        this.set_title("远程命令行")
-        this.on_msg(this.cmd_handle.bind(this))
+        this.current_socket.on("data", (data: Buffer) =>
+        {
+            _fun(decode(data, "GB2312"))
+        })
+    }
+
+    send(msg: string)
+    {
+        this.current_socket.write(msg)
+    }
+
+    async init_win()
+    {
+        await new Promise(succ =>
+        {
+            this.net_socket_server.listen(8088)
+            this.net_socket_server.on("connection", (socket: Socket) =>
+            {
+                this.current_socket = socket
+                console.log("connected");
+                this.on_msg(this.cmd_handle.bind(this))
+                succ()
+            })
+        })
         this.init_command()
     }
 
@@ -50,30 +71,6 @@ export class Main_ui extends UI
 
     init_command()
     {
-        if(!isUndefined(this.UI_win))
-        {
-            this.UI_win.on("close", () =>
-            {
-                try
-                {
-                    this.current_client.close()
-                }catch(e){}
-                this.server_list.forEach(element => {
-                    element.close()
-                });
-            })
-        }
-        this.command_helper.add_func("close", async () =>
-        {
-            setTimeout(() =>
-            {
-                if(!isUndefined(this.UI_win))
-                {
-                    this.UI_win.close()
-                }
-            }, 1e3)
-            return "关闭中......"
-        })
         this.init_command_channel()
         this.init_client()
         this.init_server()
