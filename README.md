@@ -2,7 +2,7 @@
 
 通过公用免费的websocket服务器现实的远程命令行终端(伪)
 
-最新版本：v1.20191016150903
+最新版本：v2.20191203102442
 
 
 
@@ -64,19 +64,39 @@ cmd 具体命令
 
 ## 其他命令(服务端)
 
+### server_cmd_start
+
+启动新的终端
+
+### server_cmd_now
+
+显示当前的终端编号
+
+### server_cmd_switch
+
+通过ID切换当前终端
+
+```
+server_cmd_switch 2
+```
+
+### server_cmd_list
+
+显示当前所有的终端id
+
 ### server_cmd_count
 
-显示当前的cmd进程
+显示当前的终端数量
 
 ### server_cmd_stop
 
-结束第几个cmd进程
+通过id结束终端
 
 ```
-server_cmd_stop index
+server_cmd_stop id
 ```
 
-index 第几个进程。如：第一个，则为0
+id 终端id
 
 
 
